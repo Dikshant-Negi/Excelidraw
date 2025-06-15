@@ -8,13 +8,19 @@
     "start": "node ./dist/index.js"
   },
   "dependencies": {
+    "@repo/backend-common": "*",
+    "@repo/db-common": "*",
     "@repo/typescript-config": "*",
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/mongoose": "^5.11.97",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
-    "@repo/backend-common":"*",
-    "@repo/db-common":"*"
+    "jsonwebtoken": "^9.0.2"
   },
   "keywords": [],
   "author": "",

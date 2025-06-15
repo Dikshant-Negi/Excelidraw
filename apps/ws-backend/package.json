@@ -8,13 +8,14 @@
     "start": "node ./dist/index.js"
   },
   "dependencies": {
+    "@repo/backend-common": "*",
+    "@repo/db-common": "*",
     "@repo/typescript-config": "*",
     "@types/cookie-parser": "^1.4.9",
     "@types/ws": "^8.18.1",
     "cookie-parser": "^1.4.7",
-    "ws": "^8.18.2",
-    "@repo/backend-common":"*",
-    "@repo/db-common":"*"
+    "jsonwebtoken": "^9.0.2",
+    "ws": "^8.18.2"
   },
   "keywords": [],
   "author": "",

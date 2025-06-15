@@ -2,11 +2,11 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import {accessToken} from "@repo/backend-common/config"
 
-export function authentication(
+export  const authentication = (
   req: Request,
   res: Response,
   next: NextFunction
-) {
+):any =>{
   try {   
     const { accesstoken } = req.cookies;
     if (!accesstoken) {

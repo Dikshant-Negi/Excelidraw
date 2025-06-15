@@ -1,2 +1,2 @@
-export const accessToken = process.env.ACCESS_TOKEN
-export const refreshToken = process.env.REFRESH_TOKEN
+export const accessToken : String  = process.env.ACCESS_TOKEN || "accesstoken"
+export const refreshToken : String = process.env.REFRESH_TOKEN || "refreshtoken"
