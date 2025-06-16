@@ -24,3 +24,23 @@ export const createRoom = async (
          res.status(500).json({success:true, message:"room creation failed"})
     }
 }
+
+export const getChats = async (req:express.Request , res:express.Response) =>{
+    try {
+        const roomId = Number(req.params.roomId)
+        const messages = await prismaClient.chat.findMany({
+            where:{
+                roomId
+            },
+            orderBy:{
+                id:'desc'
+            },
+            take:50
+        })
+
+        res.status(200).json({success:false,data:messages})
+    } catch (error) {
+        console.log("error in getchat",error)
+        res.status(500).json({success:false,message:error})
+    }
+}
