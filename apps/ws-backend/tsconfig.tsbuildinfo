@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/utility/common.ts"],"version":"5.8.2"}
+{"root":["./src/index.ts","./src/store/usermanager.ts","./src/utility/common.ts"],"version":"5.8.2"}

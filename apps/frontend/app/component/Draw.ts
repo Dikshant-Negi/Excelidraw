@@ -16,15 +16,28 @@ type shape =
       radius: number;
     };
 
-export async function Draw(canvas: HTMLCanvasElement,roomId:string) {
+export async function Draw(
+  canvas: HTMLCanvasElement,
+  roomId: string,
+  socket: WebSocket
+) {
   const cxt = canvas.getContext("2d");
   if (!cxt) return;
 
   let startX = 0;
   let startY = 0;
   let clicked = false;
-  let existingshape: shape[] = await getMessages(roomId) ;
+  let existingshape: shape[] = await getMessages(roomId);
+  socket.onmessage = (event) => {
+    const message = JSON.parse(event.data);
+    if (message.type === "chat") {
+      const parsedShape = JSON.parse(message.message);
+      existingshape.push(parsedShape);
+      clearCanvas(existingshape, canvas, cxt);
+    }
+  };
 
+  clearCanvas(existingshape, canvas, cxt);
   canvas.addEventListener("mousedown", (e) => {
     clicked = true;
     const rect = canvas.getBoundingClientRect();
@@ -42,14 +55,21 @@ export async function Draw(canvas: HTMLCanvasElement,roomId:string) {
 
     const width = endX - startX;
     const height = endY - startY;
-
-    existingshape.push({
+    const shape: shape = {
       type: "rect",
       x: startX,
       y: startY,
       width,
       height,
-    });
+    };
+    existingshape.push(shape);
+    socket.send(
+      JSON.stringify({
+        type: "chat",
+        roomId: roomId,
+        message: JSON.stringify(shape),
+      })
+    );
 
     clearCanvas(existingshape, canvas, cxt);
   });
@@ -85,21 +105,21 @@ function clearCanvas(
 }
 
 async function getMessages(roomId: string): Promise<shape[]> {
-    try {
-        const response = await axios.get(backendUrl + `/room/getchats/${roomId}`);
-        const messages = response.data.messages;
+  try {
+    const response = await axios.get(backendUrl + `/room/getchats/${roomId}`);
+    const messages = response.data.messages;
 
-        if (Array.isArray(messages)) {
-            let shapes = messages.flatMap((x: { message: string }) => {
-                const messageData = JSON.parse(x.message);
-                return Array.isArray(messageData) ? messageData : [messageData];
-            });
-            return shapes as shape[];
-        }
-
-        return [];
-    } catch (error) {
-        console.log("error in getchat", error);
-        return [];
+    if (Array.isArray(messages)) {
+      let shapes = messages.flatMap((x: { message: string }) => {
+        const messageData = JSON.parse(x.message);
+        return Array.isArray(messageData) ? messageData : [messageData];
+      });
+      return shapes as shape[];
     }
+
+    return [];
+  } catch (error) {
+    console.log("error in getchat", error);
+    return [];
+  }
 }

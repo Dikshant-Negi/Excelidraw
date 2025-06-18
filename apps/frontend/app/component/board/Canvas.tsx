@@ -2,13 +2,13 @@
 import React, { useEffect, useRef } from 'react'
 import { Draw } from '../Draw';
 
-function Canvas({roomId}:{roomId:string}) {
+function Canvas({roomId,socket}:{roomId:string,socket:WebSocket}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     if (canvasRef.current) {
       const canvas = canvasRef.current;
-      Draw(canvas,roomId);
+      Draw(canvas,roomId,socket);
     }
   }, [canvasRef]);
   return (

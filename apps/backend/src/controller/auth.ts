@@ -64,20 +64,14 @@ export const signin = async (
         .json({ success: false, message: "Incorrect Password" });
     }
 
-    const refreshToken = generateRefreshToken(user.id);
-    await prismaClient.user.update({
-      where: { id: user.id },
-      data: { refreshtoken: refreshToken },
-    });
-
-    const accessToken = generateAccessToken(user.email, user.name);
+    const token = generateRefreshToken(user.id);
+  
     const cookieOptions = {
       httpOnly: true, 
-      secure: true
+      secure: false,
+     sameSite: 'lax' as const
     };
     return res
-      .cookie("accesstoken", accessToken,cookieOptions)
-      .cookie("refreshtoken", refreshToken,cookieOptions)
       .status(200)
       .json({
         success: true,
@@ -86,6 +80,7 @@ export const signin = async (
           email: user.email,
           name: user.name,
         },
+        token
       });
   } catch (error) {
     console.log("signin error",error)
